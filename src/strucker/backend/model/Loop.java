@@ -1,10 +1,11 @@
 package strucker.backend.model;
 
 import java.util.ArrayList;
+import lombok.*;
 
-public class Loop extends Struck{
-
-    Sequence seq = new Sequence(this);
+@ToString
+public class Loop extends Sequence{
+    @Getter @Setter
     String condition;
     
     public Loop(Struck master, String condition){
@@ -17,52 +18,19 @@ public class Loop extends Struck{
         this.condition = condition;
     }
     
-    public void add(Struck stg){
-        stg.setMaster(this);
-        seq.add(stg);
-    }
-    
-    public void addAll(Sequence s){
-        for(Struck stg : s.getChilds()){
-            add(stg);
-        }
-    }
-    
-    public void addAll(Sequence s, int i){
-        for(Struck stg : s.getChilds()){
-            add(stg, i);
-            i++;
-        }
-    }
-    
-    public void add(Struck stg, int i){
-        stg.setMaster(this);
-        seq.add(stg, i);
-    }
-    
-    public void remove(Struck stg){
-        seq.remove(stg);
-    }
-    
-    public void remove(int i){
-        seq.remove(i);
-    }
-    
     @Override
-    public ArrayList<Struck> getChilds() {
-        return seq.getChilds();
-    }
-    
-    @Override
-    public String toString() {
+    public String toCode() {
         StringBuilder sgb = new StringBuilder();
-        sgb.append(generateTabs(getLevel()-1))
-           .append("while")
-           .append(" "+condition+" ")
-           .append("do\n")
-           .append(seq.toString())
-           .append(generateTabs(getLevel()-1))
-           .append("done\n");
+        sgb.append(generateTab(getLevel()-1))
+           .append("while "+condition+" do\n");
+        for(Struck stg : seq){
+            if(stg instanceof Action){
+                sgb.append(generateTab(getLevel())).append(stg.toCode()).append('\n');
+            } else {
+                sgb.append(stg.toCode());
+            }
+        }
+        sgb.append(generateTab(getLevel()-1)).append("done\n");
         return sgb.toString();
     }
     

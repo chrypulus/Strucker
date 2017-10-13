@@ -1,8 +1,11 @@
 package strucker.backend.model;
 
 import java.util.ArrayList;
+import lombok.*;
 
+@ToString
 public class Action extends Struck{
+    @Getter @Setter
     private String action;
     
     public Action(Struck master, String action){
@@ -14,10 +17,6 @@ public class Action extends Struck{
         super();
         this.action = action;
     }
-    
-    public void setAction(String action) {
-        this.action = action;
-    }
 
     @Override
     public ArrayList<Struck> getChilds() {
@@ -25,7 +24,7 @@ public class Action extends Struck{
     }
 
     @Override
-    public String toString() {
+    public String toCode() {
         return action;
     }
 }

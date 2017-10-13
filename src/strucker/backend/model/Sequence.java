@@ -1,10 +1,12 @@
 package strucker.backend.model;
 
 import java.util.ArrayList;
+import lombok.NonNull;
+import lombok.ToString;
 
+@ToString
 public class Sequence extends Struck{
-
-    private ArrayList<Struck> seq = new ArrayList<>();
+    protected ArrayList<Struck> seq = new ArrayList<>();
     
     public Sequence(Struck master) {
         super(master);
@@ -19,22 +21,24 @@ public class Sequence extends Struck{
         seq.add(stg);
     }
     
+    public void add(Struck stg, int i){
+        stg.setMaster(this);
+        seq.add(i, stg);
+    }
+    
     public void addAll(Sequence s){
         for(Struck stg : s.getChilds()){
-            add(stg);
+            stg.setMaster(this);
+            seq.add(stg);
         }
     }
     
     public void addAll(Sequence s, int i){
         for(Struck stg : s.getChilds()){
-            add(stg, i);
+            stg.setMaster(this);
+            seq.add(i, stg);
             i++;
         }
-    }
-    
-    public void add(Struck stg, int i){
-        stg.setMaster(this);
-        seq.add(i, stg);
     }
     
     public void remove(Struck stg){
@@ -51,10 +55,14 @@ public class Sequence extends Struck{
     }
 
     @Override
-    public String toString() {
+    public String toCode() {
         StringBuilder str = new StringBuilder();
         for(Struck stg : seq){
-            str.append(generateTabs(getLevel()-1)).append(stg.toString()).append('\n');
+            if(stg instanceof Action){
+                str.append(generateTab(getLevel())).append(stg.toCode()).append('\n');
+            } else {
+                str.append(stg.toCode());
+            }
         }
         return str.toString();
     }

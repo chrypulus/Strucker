@@ -1,16 +1,18 @@
 package strucker.backend.model;
 
 import java.util.ArrayList;
+import lombok.*;
 
 public abstract class Struck {
+    @Getter @Setter
     Struck master;
     
-    protected static String generateTabs(int i){
+    protected static String generateTab(int i){
         if(i < 0){
             throw new IllegalArgumentException("The parameter must be positive integer. Current parameter:"+i);
         }
         if(i == 1 || i == 0) return "";
-        return "    " + generateTabs(i-1);
+        return "    " + generateTab(i-1);
     }
     
     public Struck(Struck master){
@@ -21,10 +23,6 @@ public abstract class Struck {
         this.master = null;
     }
     
-    public void setMaster(Struck stg){
-        this.master = stg;
-    }
-    
     public int getLevel(){
         if(master == null)return 1;
         return master.getLevel() + 1;
@@ -32,6 +30,5 @@ public abstract class Struck {
     
     public abstract ArrayList<Struck> getChilds();
     
-    @Override
-    public abstract String toString();
+    public abstract String toCode();
 }
