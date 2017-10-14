@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import lombok.*;
 
 @ToString
-public class Loop extends Struck{
-    @Getter @Setter private String condition;
-    @Getter private ArrayList<Struck> sequence = new ArrayList<>();
+public class MainSequence extends Struck{
+    @Getter
+    private ArrayList<Struck> sequence;
     
-    public Loop(String condition){
+    public MainSequence(){
         super();
-        this.condition = condition;
+        sequence = new ArrayList<>();
     }
     
     public void add(Struck stg){
@@ -35,18 +35,6 @@ public class Loop extends Struck{
     }
     
     @Override
-    public String toCode() {
-        StringBuilder sgb = new StringBuilder();
-        sgb.append(generateTab(getLevel()))
-           .append("while "+condition+" do\n");
-        for(Struck stg : sequence){
-            sgb.append(stg.toCode());
-        }
-        sgb.append(generateTab(getLevel())).append("done\n");
-        return sgb.toString();
-    }
-
-    @Override
     public ArrayList<Struck> getChilds() {
         ArrayList<Struck> childs = new ArrayList<>();
         for(Struck stg : sequence){
@@ -55,4 +43,14 @@ public class Loop extends Struck{
         }
         return childs;
     }
+
+    @Override
+    public String toCode() {
+        StringBuilder sb = new StringBuilder();
+        for(Struck stg : sequence){
+            sb.append(stg.toCode());
+        }
+        return sb.toString();
+    }
+    
 }

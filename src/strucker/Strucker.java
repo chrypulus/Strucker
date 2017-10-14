@@ -1,29 +1,34 @@
 package strucker;
 
-import strucker.backend.model.Action;
-import strucker.backend.model.Loop;
-import strucker.backend.model.Sequence;
+import strucker.backend.model.*;
 
 public class Strucker {
 
     public static void main(String[] args) {
-        Sequence s1 = new Sequence();
-        s1.add(new Action("i := 0"));
-        s1.add(new Action("i := 2"));
-        s1.add(new Action("i := 5"));
-        s1.add(new Action("i := 29"));
-        Sequence s2 = new Sequence();
-        s2.add(new Action("b := i < 9"));
-        s2.add(new Action("b2 := i < 6"));
-        s2.add(new Action("b3 := i <= 3"));
-        s1.addAll(s2);
-        Loop l1 = new Loop("i <= 3");
-        l1.add(new Action("i++"));
-        Loop l2 = new Loop("i <= 3");
-        l2.add(new Action("i++"));
-        l1.add(l2);
-        s1.add(l1);
-        System.out.print(s1.toCode());
+        MainSequence ms = new MainSequence();
+        Action a1 = new Action("int j = 0;");
+        Action a2 = new Action("List l = get();");
+        Loop l1 = new Loop("j <= l.length()");
+        Action a3 = new Action("j++;");
+        Branch b1 = new Branch("i <= l[i]");
+        Action a4 = new Action("i++;");
+        Action a5 = new Action("i--;");
+        Action a6 = new Action("j=0;");
+        
+        ms.add(a1);
+        ms.add(a2);
+        ms.add(l1);
+        ms.add(a6);
+        l1.add(b1);
+        b1.addIf(a4);
+        b1.addElse(a5);
+        l1.add(a3);
+        
+//        System.out.println(ms.toString() + " - " + ms.getLevel());
+//        for(Struck stg : ms.getChilds()){
+//            System.out.println(stg.toString() + " - " + stg.getLevel());
+//        }
+        System.out.print(ms.toCode());
     }
     
 }

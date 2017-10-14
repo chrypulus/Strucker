@@ -8,10 +8,8 @@ public abstract class Struck {
     Struck master;
     
     protected static String generateTab(int i){
-        if(i < 0){
-            throw new IllegalArgumentException("The parameter must be positive integer. Current parameter:"+i);
-        }
-        if(i == 1 || i == 0) return "";
+        if(i <= 0) throw new IllegalArgumentException("The parameter must be positive integer. Current parameter:"+i);
+        if(i == 1) return "";
         return "    " + generateTab(i-1);
     }
     
@@ -24,7 +22,7 @@ public abstract class Struck {
     }
     
     public int getLevel(){
-        if(master == null)return 1;
+        if(master == null)return 0;
         return master.getLevel() + 1;
     }
     

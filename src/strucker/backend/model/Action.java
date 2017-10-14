@@ -20,11 +20,11 @@ public class Action extends Struck{
 
     @Override
     public ArrayList<Struck> getChilds() {
-        return null;
+        return new ArrayList<Struck>();
     }
 
     @Override
     public String toCode() {
-        return action;
+        return generateTab(getLevel())+action+'\n';
     }
 }
